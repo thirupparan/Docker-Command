@@ -1,0 +1,259 @@
+Docker Commands ref : 
+https://linuxize.com/post/how-to-remove-docker-images-containers-volumes-and-networks/
+
+
+docker pull <image name>		- pull
+
+
+docker rmi <IMAGE_NAME>:<TAG_NAME>	-	remove tage name and delete image
+
+docker images -f “dangling=true” -q		-	 remove all <none> images
+
+docker image rm <image_id/image_name>	- remove docker images
+
+docker image rm <image_id_1> <image_id_2> <image_id_3>	- remove multiple docker images
+
+docker rm <container_id>	-	remove docker container
+
+docker rm <container_id_1> <container_id_2>	-	remove multilple docker container
+
+
+docker ps -a	- check all docker container
+
+
+docker run --name <ANY_NAME> -it <IMAGE_NAME>		-	 run perticular image
+
+
+docker start <CONTAINER_ID>
+
+docker stop <CONTAINER_ID>
+
+
+docker image prune - remove All unused images
+
+docker container prune - remove All unused containers
+
+
+
+list all files in ubuntu terminal 
+
+ls
+
+docker ps - a    			- check all images
+
+docker pause <image_id>  	- it can not edit container
+
+docker unpause <image_id>	- it can  edit container
+
+docker to <image_id> 		- check last container
+
+docker stats <image_id> 	- check all details about container
+
+docker attach <image_id> 	- kill container
+
+docker rm <image_id> 		- remove container
+
+
+docker pull jenkins 		- pull jenkins container
+
+jenkins port 8080
+docker run -u 0 --name Myjenkins -p 8080:8080 -p 50000:50000 -v /Users/Puthiyajothi/Desktop/jenkins:/var/jenkins_home jenkins		
+
+jenkins port 9090 
+docker run -u 0 --name Myjenkins2 -p 9090:8080 -p 50000:50000 -/Users/Puthiyajothi/Desktop/jenkins:/var/jenkins_home jenkins		
+
+jothi- 886f62d5d4e3452da3bed713486c9358(jenkins-PW)
+jothi final jenkins pw - 123456
+
+docker volume create Myjenkins		- build jenkins valume
+
+docker volume inspect <volume neme>	- check jenkins valume
+
+docker volume ls 
+
+
+windows cmd create dockerfile --   type NUL > <filename>
+
+windows cmd Edit dockerfile --   type NUL > notepad <filename>
+
+docker build -t <imagename>:<id> . 		-  build docker image
+for ex: docker build -t myimage:1.0 .
+
+docker images			- check docker container 
+
+
+type docker-compose.yml		- check yml file affter edit
+
+
+docker-compose config		- after config compose.yml check
+
+docker-compose up -d		- download compose.yml
+
+
+build Docker file in side of our application
+
+FROM openjdk:latest
+
+ADD target/employeeservice.jar employeeservice.jar
+
+EXPOSE 8080
+
+CMD ["java", "-jar", "employeeservice.jar"]
+
+
+
+Build Dockerfile in docker:
+	docker build -f Dockerfile -t dockerspringapp .
+    
+    
+Run Docker Image:
+	docker run --name <ANY_NAME> -p 8080:8080 <IMAGE_NAME/IMAGE_ID>
+    
+    E.G:
+    	docker run --name dockerapp -p 8080:8080 dockerspringapp
+
+
+
+
+Docker Push:
+1. docker tag 4b795844c7ab /hello-world 
+2. docker push /hello-world:latest 
+
+OR
+
+1. docker tag 4b795844c7ab repo-username/hello-world 
+2. docker push repo-username/hello-world:latest 
+
+
+
+Docker with database:
+1. docker pull mysql
+2. run mysql image
+	docker run -d --name <ANY_NAME> -e MYSQL_ROOT_PASSWORD=<PASSWORD> -e MYSQL_DATABASE=<YOURS_SCHEMA> -e MYSQL_USER=<USERNAME> -e MYSQL_PASSWORD=<PASSWORD>  DATABASE_PORT:<MYSQL_>  <IMAGE_NAME>:<IMAGE_TAG>
+	
+    E.G:
+		docker run -d --name mysql -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=employees -e DATABASE_PORT:3306 -e MYSQL_USER=root -e MYSQL_PASSWORD=root mysql:latest
+        
+        OR
+        
+        docker run -d --name mysqldocker -e MYSQL_ROOT_PASSWORD=root  -e MYSQL_USER=root -e MYSQL_PASSWORD=root -p 3306:3306 mysql:latest
+
+
+Default mysql port is 3306
+
+
+3. build docker file for the spring boot
+
+4. run spring-boot image
+	docker run -p <PORT>:<PORT> --name <ANY_NAME> --link <MYSQL_CONTAINER_NAME>:<MYSQL_IMAGE_NAME> 
+    -d <SPRING_APP_IMAGE_NAME>
+
+	E.G:
+		docker run -p 8084:8084 --name empservice --link empmysql:mysql -d employeeservice
+
+
+E.G:
+Get into docker container image:
+
+	CONTAINER ID   		IMAGE    			PORTS      				NAMES 
+	d44f7fa5f841   		mysql:latest 		3306/tcp, 33060/tcp   	dmysql
+
+	docker exec -it dmysql mysql -u root -p
+
+
+# Docker Swarm
+
+
+There is a similar issue in docker/machine/issues/2773.
+
+Try and see if the issue persists when creating a machine yourself instead of using quick-start:
+
+Find where docker-machine.exe has been installed (or copy the latest released one in your %PATH%) and use that, from a regular CMD session:
+
+First test the existing machine:
+
+# find the name of the machine created.
+
+docker-machine ls
+docker-machine env --shell cmd <nameOfTheMachine>
+docker machine ssh <nameOfTheMachine>
+Then try creating a new one:
+
+docker-machine create -d virtualbox <aNewMachine>
+docker-machine env --shell cmd <aNewMachine>
+docker machine ssh <aNewMachine>
+
+docker-machine ls - check all machine
+
+docker-machine ip manager1 - check ip
+
+ Initialize Docker Swarm    
+ 		docker swarm init --advertise-addr MANAGER_IP
+
+docker swarm join --token SWMTKN-1-0m3rqo61j9iedifvqxogi4bmc9yad3jwjcjl55qrmx9pljmme4-ey1iwpayi5m0a2fkis3tvqe55 192.168.99.101:2377 - join manager swarm and worker swarm
+
+docker service create --replicas 3 -p 80:80 --name web1 nginx - Run containers on Docker Swarm
+
+docker-machine ls - check machine 
+
+docker service scale web1=5 - Scale service up and down On manager node
+
+docker service ps <name of service>	- check all service
+
+docker service ls	- docker service 
+
+docker-machine ssh manager1 	- go to manager machine 
+
+docker service update --image nginx:1.14.0 web1 - update service
+
+docker swarm	- check swarm 
+
+docker-machine ssh worker1 -- go to worker machine
+
+docker node ls - check machine status
+
+docker node update --availability drain <swarm name> 	- Shutdown node
+
+docker service rm <service name> 	- remove all the service EX: docker service rm web1
+
+docker swarm leave 	- leave the machine
+
+docker-machine stop <machinename> 	- stop machine run this commond out of manager,worker
+
+docker-machine rm <machine-name>    - remove machine 
+
+docker node inspect nodename
+
+docker node inspect self	- Inspecting Nodes (this command can run only on manager node)
+
+docker node inspect worker1	- Inspecting Nodes (this command can run only on manager node)
+
+
+note:
+
+A swarm is a group of machines that are running Docker and joined into a cluster 
+
+Docker Swarm is a tool for Container Orchestration
+and docker is world leading software container platform.
+Docker is a set of coupled software-as-a-service and platform-as-a-service products 
+that use operating-system-level virtualization to develop and deliver software in packages called containers.
+The software that hosts the containers is called Docker Engine. 
+It was first started in 2013 and is developed by Docker
+
+Let’s take an example
+
+You have 100 containers
+
+You need to do 
+- Health check on every container
+- Ensure all containers are up on every system
+- Scaling the containers up or down depending on the load
+- Adding updates/changes to all the containers
+
+Orchestration - managing and controlling multiple docker containers as a single service
+Tools available - Docker Swarm, Kubernetes, Apache Mesos
+
+REFERENCES:
+https://docs.docker.com/get-started/p...
+https://rominirani.com/docker-swarm-t...
+https://www.youtube.com/watch?v=WvmF-WsmzfQ&list=PLhW3qG5bs-L99pQsZ74f-LC-tOEsBp2rK&index=16
